@@ -4,12 +4,21 @@ option go_package = "github.com/dlacreme/demail-proto";
 
 service Demail {
 
-    rpc SendEmail(Email) returns (Status) {}
+    rpc PushLog(Log) returns (Status) {}
 
 }
 
-message Email {
+enum Severity {
+    DEBUG = 000; // For debug purpose
+    LOG = 100; // Normal
+    WARNING = 200; // Important and impact one or few users
+    CRITICAL = 300; // High impact on users
+    FATAL = 400; // Application crashed
+}
 
+message Log {
+    Severity severity = 1;
+    string message = 2;
 }
 
 message Status {
