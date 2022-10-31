@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DemailClient interface {
-	Log(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Status, error)
+	PushLog(ctx context.Context, in *Log, opts ...grpc.CallOption) (*Status, error)
 }
 
 type demailClient struct {
@@ -33,9 +33,9 @@ func NewDemailClient(cc grpc.ClientConnInterface) DemailClient {
 	return &demailClient{cc}
 }
 
-func (c *demailClient) Log(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Status, error) {
+func (c *demailClient) PushLog(ctx context.Context, in *Log, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
-	err := c.cc.Invoke(ctx, "/Demail/Log", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/Demail/PushLog", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *demailClient) Log(ctx context.Context, in *Event, opts ...grpc.CallOpti
 // All implementations must embed UnimplementedDemailServer
 // for forward compatibility
 type DemailServer interface {
-	Log(context.Context, *Event) (*Status, error)
+	PushLog(context.Context, *Log) (*Status, error)
 	mustEmbedUnimplementedDemailServer()
 }
 
@@ -54,8 +54,8 @@ type DemailServer interface {
 type UnimplementedDemailServer struct {
 }
 
-func (UnimplementedDemailServer) Log(context.Context, *Event) (*Status, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Log not implemented")
+func (UnimplementedDemailServer) PushLog(context.Context, *Log) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PushLog not implemented")
 }
 func (UnimplementedDemailServer) mustEmbedUnimplementedDemailServer() {}
 
@@ -70,20 +70,20 @@ func RegisterDemailServer(s grpc.ServiceRegistrar, srv DemailServer) {
 	s.RegisterService(&Demail_ServiceDesc, srv)
 }
 
-func _Demail_Log_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Event)
+func _Demail_PushLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Log)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DemailServer).Log(ctx, in)
+		return srv.(DemailServer).PushLog(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Demail/Log",
+		FullMethod: "/Demail/PushLog",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DemailServer).Log(ctx, req.(*Event))
+		return srv.(DemailServer).PushLog(ctx, req.(*Log))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,8 +96,8 @@ var Demail_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DemailServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Log",
-			Handler:    _Demail_Log_Handler,
+			MethodName: "PushLog",
+			Handler:    _Demail_PushLog_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
