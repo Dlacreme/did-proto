@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "github.com/dlacreme/demail-proto";
+
+service Demail {
+
+    rpc SendEmail(Email) returns (Status) {}
+
+}
+
+message Email {
+
+}
+
+message Status {
+    bool status = 1;
+}
