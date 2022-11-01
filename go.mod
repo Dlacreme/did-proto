@@ -1,3 +1,3 @@
-module github.com/dlacreme/demail-proto
+module github.com/dlacreme/did-proto
 
 go 1.19

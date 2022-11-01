@@ -1,8 +1,8 @@
 SHELL = /bin/bash
 
 SRC_FOLDER=.
-NAME = demail-proto
-MAIN = $(SRC_FOLDER)/demail.proto
+NAME = did-proto
+MAIN = $(SRC_FOLDER)/did.proto
 CC = protoc
 
 .PHONY: all

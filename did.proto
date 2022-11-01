@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option go_package = "github.com/dlacreme/did-proto";
+
+service Did {
+
+    rpc PushLog(Log) returns (ResponseStatus) {}
+
+}
+
+enum Status {
+    UNKNOWN = 0;
+    OK = 1;
+    ERROR = 2;
+}
+
+enum Severity {
+    DEBUG = 0; // For debug purpose
+    LOG = 1; // Normal
+    WARNING = 2; // Important and impact one or few users
+    CRITICAL = 3; // High impact on users
+    FATAL = 4; // Application crashed
+}
+
+message Log {
+    Severity severity = 1;
+    string message = 2;
+}
+
+message ResponseStatus {
+    Status status = 1;
+}
